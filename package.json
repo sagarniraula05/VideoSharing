@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "build": "cd src/presentation && npm install && npm run build",
+    "build": "cd src/presentation && npm install && CI=false && npm run build",
     "start": "npm run build && node src/app.js"
   },
   "keywords": [],
