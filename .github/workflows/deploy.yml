@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.CPANEL_SSH_KEY }}
           passphrase: ${{ secrets.CPANEL_SSH_PASSPHRASE }}
           script: |
-            cd ~/oneglance.sagarniraula.com   
+            cd ~/home/${{ secrets.CPANEL_USER }}/oneglance.sagarniraula.com   
             git pull origin main   
             npm install --production
             touch tmp/restart.txt
