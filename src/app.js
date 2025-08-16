@@ -5,6 +5,7 @@ const routes = require('./routes');
 const { connectDB } = require('./infrastructure/db');
 const app = express();
 
+app.set('trust proxy', true);
 app.use(express.json());
 app.use(cookieParser());
 app.use('/', routes);
