@@ -1,2 +1,5 @@
-./uploads
+/uploads
 /.vs
+/node_modules
+/src/presentation/node_modules/
+/src/presentation/build/

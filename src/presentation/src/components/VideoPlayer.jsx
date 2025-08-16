@@ -9,6 +9,8 @@ export default function VideoPlayer({ src, allowSeek = false, generatedUrl = nul
   const [duration, setDuration] = useState(0);
   const [hasEnded, setHasEnded] = useState(false);
   const [hasSeekedToTimestamp, setHasSeekedToTimestamp] = useState(false);
+  const [bufferedPercent, setBufferedPercent] = useState(0);
+  const [isBuffering, setIsBuffering] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -21,9 +23,6 @@ export default function VideoPlayer({ src, allowSeek = false, generatedUrl = nul
     }
 
     const handleCanPlay = () => {
-      console.log('Seeking to timestamp:', timeStamp);
-      console.log('Video duration:', video.duration);
-      console.log('ReadyState:', video.readyState);
       if (timeStamp && !hasSeekedToTimestamp) {
         video.currentTime = timeStamp;
         setCurrentTime(timeStamp);
@@ -37,18 +36,34 @@ export default function VideoPlayer({ src, allowSeek = false, generatedUrl = nul
       updateAjaxViewed();
     };
 
+    const handleProgress = () => {
+      if (video.buffered.length > 0 && duration > 0) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        setBufferedPercent((bufferedEnd / duration) * 100);
+      }
+    };
+
+    const handleWaiting = () => setIsBuffering(true);
+    const handlePlaying = () => setIsBuffering(false);
+
     video.addEventListener("timeupdate", updateTime);
     video.addEventListener("loadedmetadata", updateDuration);
     video.addEventListener("canplay", handleCanPlay);
     video.addEventListener("ended", handleEnded);
+    video.addEventListener("progress", handleProgress);
+    video.addEventListener("waiting", handleWaiting);
+    video.addEventListener("playing", handlePlaying);
 
     return () => {
       video.removeEventListener("timeupdate", updateTime);
       video.removeEventListener("loadedmetadata", updateDuration);
       video.removeEventListener("canplay", handleCanPlay);
       video.removeEventListener("ended", handleEnded);
+      video.removeEventListener("progress", handleProgress);
+      video.removeEventListener("waiting", handleWaiting);
+      video.removeEventListener("playing", handlePlaying);
     };
-  }, [timeStamp, hasSeekedToTimestamp]);
+  }, [timeStamp, hasSeekedToTimestamp, duration]);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -172,6 +187,17 @@ export default function VideoPlayer({ src, allowSeek = false, generatedUrl = nul
       )}
       <div
         style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          width: `${bufferedPercent}%`,
+          height: "6px",
+          backgroundColor: "#aaa", 
+          zIndex: 0,
+        }}
+      />
+      <div
+        style={{
             position: "absolute",
             bottom: 0,
             left: 0,
@@ -182,6 +208,23 @@ export default function VideoPlayer({ src, allowSeek = false, generatedUrl = nul
             zIndex: 1,
         }}
         />
+
+      {isBuffering && (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            border: "6px solid rgba(255,255,255,0.3)",
+            borderTop: "6px solid #fff",
+            borderRadius: "50%",
+            width: "50px",
+            height: "50px",
+            animation: "spin 1s linear infinite",
+          }}
+        />
+      )}
     </div>
   );
 }
