@@ -16,19 +16,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install dependencies and build
         run: |
           npm install
           npm run build  
 
-      - name: Upload build files via SFTP
-        uses: appleboy/scp-action@v0.1.7
+      - name: Deploy via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          host: ${{ secrets.CPANEL_HOST }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}
+          server: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.CPANEL_USER }}
+          password: ${{ secrets.CPANEL_PASSWORD }}
+          protocol: sftp
           port: 21
-          source: "build/*"
-          target: "/home2/${{ secrets.CPANEL_USER }}/oneglance.sagarniraula.com" 
+          local-dir: ./build
+          server-dir: /home/${{ secrets.CPANEL_USER }}/public_html/ 
