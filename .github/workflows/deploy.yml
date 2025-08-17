@@ -32,4 +32,4 @@ jobs:
           protocol: ftp
           port: 21
           local-dir: ./build/
-          server-dir: /home/${{ secrets.CPANEL_USER }}/public_html/ 
+          server-dir: / 
