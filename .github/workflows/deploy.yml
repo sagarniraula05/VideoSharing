@@ -1,9 +1,9 @@
-name: Deploy to cPanel
+name: Deploy
 
 on:
   push:
     branches:
-      - main   
+      - main
 
 jobs:
   deploy:
@@ -23,15 +23,12 @@ jobs:
           npm install
           npm run build  
 
-      - name: Deploy to cPanel via SSH
-        uses: appleboy/ssh-action@v0.1.10
+      - name: Upload build files via SFTP
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.CPANEL_HOST }}
-          username: ${{ secrets.CPANEL_USER }}
-          key: ${{ secrets.CPANEL_SSH_KEY }}
-          passphrase: ${{ secrets.CPANEL_SSH_PASSPHRASE }}
-          script: |
-            cd ~/home/${{ secrets.CPANEL_USER }}/oneglance.sagarniraula.com   
-            git pull origin main   
-            npm install --production
-            touch tmp/restart.txt
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}   
+          port: 22                                   
+          source: "dist/*"                           
+          target: "/home2/${{ secrets.CPANEL_USER }}/oneglance.sagarniraula.com" 
