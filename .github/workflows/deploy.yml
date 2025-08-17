@@ -31,5 +31,5 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           protocol: ftp
           port: 21
-          local-dir: ./build
+          local-dir: ./build/
           server-dir: /home/${{ secrets.CPANEL_USER }}/public_html/ 
