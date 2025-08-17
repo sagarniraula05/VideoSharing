@@ -4,8 +4,9 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "build": "cd src/presentation && npm install && CI=false && npm run build",
-    "start": "npm run build && node src/app.js"
+    "build-client": "cd src/presentation && npm install && CI=false && npm run build",
+    "build": "npm run build-client && mkdir -p build && cp -r src/presentation/build/* build/ && cp -r src/*.js build/",
+    "start": "npm run build && node build/app.js"
   },
   "keywords": [],
   "author": "",
