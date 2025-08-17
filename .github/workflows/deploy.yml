@@ -34,7 +34,7 @@ jobs:
           port: 21
           local-dir: ./
           server-dir: / 
-          exclude: {src/presentation/src,src/presentation/public,src/presentation/README.md,src/presentation/package.json,src/presentation/setupTests.js,src/presentation/App.test.js,src/presentation/reportWebVitals.js,src/presentation/logo.svg,src/presentation/assets/,node_modules,.git,.gitignore,README.md,restart-tmp}
+          exclude: src/presentation/src,src/presentation/public,src/presentation/README.md,src/presentation/package.json,src/presentation/setupTests.js,src/presentation/App.test.js,src/presentation/reportWebVitals.js,src/presentation/logo.svg,src/presentation/assets/,node_modules,.git,.gitignore,README.md,restart-tmp
 
       - name: Create restart file
         run: |
