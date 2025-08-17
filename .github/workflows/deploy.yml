@@ -28,7 +28,7 @@ jobs:
         with:
           host: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}   
-          port: 22                                   
-          source: "dist/*"                           
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: 21
+          source: "build/*"
           target: "/home2/${{ secrets.CPANEL_USER }}/oneglance.sagarniraula.com" 
