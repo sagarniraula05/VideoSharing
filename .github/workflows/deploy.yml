@@ -18,12 +18,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies and build
-        run: |
-          npm install
-          npm run build  
+      - name: Install Node.js dependencies
+        run: npm install
 
-      - name: Deploy via SFTP
+      - name: Build project
+        run: npm run build
+
+      - name: Update file on server
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.CPANEL_HOST }}
@@ -31,5 +32,23 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           protocol: ftp
           port: 21
-          local-dir: ./build/
+          local-dir: ./
           server-dir: / 
+
+      - name: Create restart file
+        run: |
+          mkdir -p restart-tmp
+          date > restart-tmp/restart.txt
+          echo "Restarting server at $(date)" > restart-tmp/restart.txt
+        shell: bash
+
+      - name: Restart server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./restart-tmp/
+          server-dir: /tmp/
